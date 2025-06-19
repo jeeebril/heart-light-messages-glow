@@ -5,7 +5,6 @@ import { SupportMessage } from './SupportMessage';
 const supportMessages = [
   "You are stronger than you know",
   "Every small step counts",
-  "Your potential is limitless", 
   "You've got this",
   "Believe in yourself",
   "Progress, not perfection",
@@ -15,7 +14,6 @@ const supportMessages = [
   "You're making a difference",
   "Keep your head up",
   "You inspire others",
-  "You're almost there",
   "Trust yourself",
   "I'm proud of you"
 ];
@@ -26,41 +24,42 @@ export const HeartLight = () => {
   const [dragPosition, setDragPosition] = useState({ x: 0, y: 0 });
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Generate well-distributed positions across the entire screen
+  // Generate better distributed positions across the entire screen
   const [messagePositions] = useState(() => {
     const positions = [];
-    const gridCols = 4;
-    const gridRows = 4;
+    const margins = { top: 8, bottom: 8, left: 8, right: 8 };
     
-    for (let i = 0; i < supportMessages.length; i++) {
-      const col = i % gridCols;
-      const row = Math.floor(i / gridCols);
-      
-      // Add randomization within grid cells to avoid perfect alignment
-      const baseX = (col / (gridCols - 1)) * 80 + 10; // 10% to 90%
-      const baseY = (row / (gridRows - 1)) * 80 + 10; // 10% to 90%
-      
-      // Add random offset within the cell
-      const offsetX = (Math.random() - 0.5) * 15;
-      const offsetY = (Math.random() - 0.5) * 15;
-      
-      // Special positioning for "I'm proud of you" message (hidden in corner)
-      if (supportMessages[i] === "I'm proud of you") {
+    // Create more spread out positions
+    const areas = [
+      // Top area
+      { x: 15, y: 12 }, { x: 85, y: 8 }, { x: 45, y: 15 },
+      // Middle-top area  
+      { x: 25, y: 35 }, { x: 75, y: 30 }, { x: 12, y: 45 },
+      // Middle area
+      { x: 88, y: 55 }, { x: 35, y: 65 }, { x: 65, y: 40 },
+      // Bottom area
+      { x: 20, y: 85 }, { x: 80, y: 90 }, { x: 50, y: 78 },
+      // Special pink message in corner
+      { x: 85, y: 15, isPink: true }
+    ];
+
+    supportMessages.forEach((message, i) => {
+      if (message === "I'm proud of you") {
         positions.push({
           id: i,
           x: 85,
           y: 15,
           isPink: true
         });
-      } else {
+      } else if (areas[i]) {
         positions.push({
           id: i,
-          x: Math.max(5, Math.min(95, baseX + offsetX)),
-          y: Math.max(5, Math.min(95, baseY + offsetY)),
+          x: areas[i].x,
+          y: areas[i].y,
           isPink: false
         });
       }
-    }
+    });
     
     return positions;
   });
@@ -119,44 +118,63 @@ export const HeartLight = () => {
           message={message}
           position={messagePositions[index]}
           lightPosition={lightPosition}
-          isPink={messagePositions[index].isPink}
+          isPink={messagePositions[index]?.isPink}
         />
       ))}
 
-      {/* Enhanced heart-shaped light */}
+      {/* Realistic glassy heart-shaped light */}
       <div
         className="fixed pointer-events-none z-50 transition-all duration-100"
         style={{
-          left: lightPosition.x - 60,
-          top: lightPosition.y - 60,
-          filter: 'drop-shadow(0 0 60px rgba(255, 255, 255, 0.9)) drop-shadow(0 0 30px rgba(255, 255, 255, 0.7))',
+          left: lightPosition.x - 80,
+          top: lightPosition.y - 80,
+          filter: 'drop-shadow(0 0 40px rgba(255, 255, 255, 0.8))',
         }}
       >
         <div
-          className="w-32 h-32 cursor-pointer pointer-events-auto relative"
+          className="w-40 h-40 cursor-pointer pointer-events-auto relative"
           onClick={handleHeartClick}
           style={{
-            background: `radial-gradient(ellipse 45% 40% at 35% 35%, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.6) 30%, rgba(255, 255, 255, 0.3) 60%, transparent 80%),
-                        radial-gradient(ellipse 45% 40% at 65% 35%, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.6) 30%, rgba(255, 255, 255, 0.3) 60%, transparent 80%),
-                        radial-gradient(ellipse 70% 90% at 50% 65%, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.5) 40%, rgba(255, 255, 255, 0.2) 70%, transparent 90%)`,
-            clipPath: 'path("M64,100 C64,85 49,70 34,70 C19,70 4,85 4,100 C4,115 64,160 64,160 C64,160 124,115 124,100 C124,85 109,70 94,70 C79,70 64,85 64,100 Z")',
-            transform: 'scale(0.9)',
+            background: `
+              radial-gradient(ellipse 35% 30% at 35% 35%, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.4) 50%, transparent 80%),
+              radial-gradient(ellipse 35% 30% at 65% 35%, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.4) 50%, transparent 80%),
+              radial-gradient(ellipse 60% 70% at 50% 60%, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.3) 60%, transparent 90%)
+            `,
+            clipPath: 'path("M80,120 C80,100 65,80 50,80 C35,80 20,100 20,120 C20,140 80,200 80,200 C80,200 140,140 140,120 C140,100 125,80 110,80 C95,80 80,100 80,120 Z")',
+            transform: 'scale(0.8)',
+            backdropFilter: 'blur(2px)',
+            border: '1px solid rgba(255, 255, 255, 0.2)',
+            borderRadius: '50% 50% 50% 50% / 60% 60% 40% 40%',
           }}
-        />
+        >
+          {/* Inner glow for more depth */}
+          <div
+            className="absolute inset-0"
+            style={{
+              background: `
+                radial-gradient(ellipse 25% 20% at 40% 40%, rgba(255, 255, 255, 0.6) 0%, transparent 70%),
+                radial-gradient(ellipse 25% 20% at 60% 40%, rgba(255, 255, 255, 0.6) 0%, transparent 70%)
+              `,
+              clipPath: 'inherit',
+            }}
+          />
+        </div>
       </div>
 
-      {/* Enhanced light beam effect with heart shape */}
+      {/* Enhanced heart-shaped light beam effect */}
       <div
         className="fixed pointer-events-none z-40"
         style={{
-          left: lightPosition.x - 120,
-          top: lightPosition.y - 120,
-          width: 240,
-          height: 240,
-          background: `radial-gradient(ellipse 40% 35% at 35% 35%, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 40%, transparent 70%),
-                      radial-gradient(ellipse 40% 35% at 65% 35%, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 40%, transparent 70%),
-                      radial-gradient(ellipse 60% 80% at 50% 60%, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.08) 50%, transparent 80%)`,
-          clipPath: 'path("M120,140 C120,120 100,100 80,100 C60,100 40,120 40,140 C40,160 120,220 120,220 C120,220 200,160 200,140 C200,120 180,100 160,100 C140,100 120,120 120,140 Z")',
+          left: lightPosition.x - 150,
+          top: lightPosition.y - 150,
+          width: 300,
+          height: 300,
+          background: `
+            radial-gradient(ellipse 30% 25% at 35% 35%, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 60%, transparent 80%),
+            radial-gradient(ellipse 30% 25% at 65% 35%, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 60%, transparent 80%),
+            radial-gradient(ellipse 50% 60% at 50% 55%, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.03) 70%, transparent 90%)
+          `,
+          clipPath: 'path("M150,180 C150,150 125,120 100,120 C75,120 50,150 50,180 C50,210 150,280 150,280 C150,280 250,210 250,180 C250,150 225,120 200,120 C175,120 150,150 150,180 Z")',
         }}
       />
     </div>
