@@ -19,9 +19,9 @@ export const SupportMessage: React.FC<SupportMessageProps> = ({
     Math.pow(lightPosition.x - messageX, 2) + Math.pow(lightPosition.y - messageY, 2)
   );
 
-  // Show message when light is within 120px
-  const isVisible = distance < 120;
-  const opacity = isVisible ? Math.max(0, 1 - distance / 120) : 0;
+  // Show message when light is within 140px for better visibility
+  const isVisible = distance < 140;
+  const opacity = isVisible ? Math.max(0, 1 - distance / 140) : 0;
 
   return (
     <div
@@ -33,8 +33,8 @@ export const SupportMessage: React.FC<SupportMessageProps> = ({
         opacity: opacity,
       }}
     >
-      <div className="px-4 py-2 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20 shadow-lg">
-        <p className="text-white text-sm font-medium whitespace-nowrap text-center">
+      <div className="px-5 py-3 bg-white/12 backdrop-blur-md rounded-xl border border-white/25 shadow-xl">
+        <p className="text-white text-sm font-semibold whitespace-nowrap text-center tracking-wide">
           {message}
         </p>
       </div>

@@ -17,17 +17,7 @@ const supportMessages = [
   "Your courage inspires others",
   "You're closer than you think",
   "Trust the process, trust yourself",
-  "You're writing your own story",
-  "Every challenge makes you stronger",
-  "Your mindset is your superpower",
-  "You're destined for greatness",
-  "Keep shining your light",
-  "You're exactly where you need to be",
-  "Your efforts are not in vain",
-  "You have everything you need inside",
-  "This too shall pass, you'll overcome",
-  "Your resilience is remarkable",
-  "You're braver than you believe"
+  "You're writing your own story"
 ];
 
 export const HeartLight = () => {
@@ -36,14 +26,33 @@ export const HeartLight = () => {
   const [dragPosition, setDragPosition] = useState({ x: 0, y: 0 });
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Generate random positions for messages
-  const [messagePositions] = useState(() => 
-    supportMessages.map((_, index) => ({
-      id: index,
-      x: Math.random() * 80 + 10, // 10% to 90% of screen width
-      y: Math.random() * 80 + 10, // 10% to 90% of screen height
-    }))
-  );
+  // Generate well-distributed positions across the entire screen
+  const [messagePositions] = useState(() => {
+    const positions = [];
+    const gridCols = 4;
+    const gridRows = 4;
+    
+    for (let i = 0; i < supportMessages.length; i++) {
+      const col = i % gridCols;
+      const row = Math.floor(i / gridCols);
+      
+      // Add randomization within grid cells to avoid perfect alignment
+      const baseX = (col / (gridCols - 1)) * 80 + 10; // 10% to 90%
+      const baseY = (row / (gridRows - 1)) * 80 + 10; // 10% to 90%
+      
+      // Add random offset within the cell
+      const offsetX = (Math.random() - 0.5) * 15;
+      const offsetY = (Math.random() - 0.5) * 15;
+      
+      positions.push({
+        id: i,
+        x: Math.max(5, Math.min(95, baseX + offsetX)),
+        y: Math.max(5, Math.min(95, baseY + offsetY))
+      });
+    }
+    
+    return positions;
+  });
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -89,7 +98,7 @@ export const HeartLight = () => {
       }}
     >
       {/* Dark overlay */}
-      <div className="absolute inset-0 bg-black/85 z-10" />
+      <div className="absolute inset-0 bg-black/90 z-10" />
       
       {/* Support Messages */}
       {supportMessages.map((message, index) => (
@@ -101,44 +110,48 @@ export const HeartLight = () => {
         />
       ))}
 
-      {/* Heart-shaped light */}
+      {/* Heart-shaped light with proper boundaries */}
       <div
         className="fixed pointer-events-none z-50 transition-all duration-100"
         style={{
-          left: lightPosition.x - 40,
-          top: lightPosition.y - 40,
-          filter: 'drop-shadow(0 0 30px rgba(255, 255, 255, 0.8))',
+          left: lightPosition.x - 60,
+          top: lightPosition.y - 60,
+          filter: 'drop-shadow(0 0 40px rgba(255, 255, 255, 0.9))',
         }}
       >
         <div
-          className="w-20 h-20 cursor-pointer pointer-events-auto relative"
+          className="w-32 h-32 cursor-pointer pointer-events-auto relative"
           onClick={handleHeartClick}
           style={{
-            background: `radial-gradient(circle, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.6) 40%, rgba(255, 255, 255, 0.2) 70%, transparent 100%)`,
-            clipPath: 'path("M40,60 C40,45 25,30 10,30 C-5,30 -20,45 -20,60 C-20,75 40,120 40,120 C40,120 100,75 100,60 C100,45 85,30 70,30 C55,30 40,45 40,60 Z")',
-            transform: 'scale(0.8)',
+            background: `radial-gradient(ellipse 40% 35% at 30% 30%, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.4) 40%, transparent 70%),
+                        radial-gradient(ellipse 40% 35% at 70% 30%, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.4) 40%, transparent 70%),
+                        radial-gradient(ellipse 60% 80% at 50% 60%, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.3) 50%, transparent 80%)`,
+            clipPath: 'path("M64,100 C64,85 49,70 34,70 C19,70 4,85 4,100 C4,115 64,160 64,160 C64,160 124,115 124,100 C124,85 109,70 94,70 C79,70 64,85 64,100 Z")',
+            transform: 'scale(0.9)',
           }}
         >
-          {/* Heart outline for better visibility */}
+          {/* Heart outline for better definition */}
           <div
-            className="absolute inset-0 border-2 border-white/60"
+            className="absolute inset-0 border-2 border-white/40"
             style={{
-              clipPath: 'path("M40,60 C40,45 25,30 10,30 C-5,30 -20,45 -20,60 C-20,75 40,120 40,120 C40,120 100,75 100,60 C100,45 85,30 70,30 C55,30 40,45 40,60 Z")',
+              clipPath: 'path("M64,100 C64,85 49,70 34,70 C19,70 4,85 4,100 C4,115 64,160 64,160 C64,160 124,115 124,100 C124,85 109,70 94,70 C79,70 64,85 64,100 Z")',
             }}
           />
         </div>
       </div>
 
-      {/* Light beam effect */}
+      {/* Enhanced light beam effect with heart shape */}
       <div
         className="fixed pointer-events-none z-40"
         style={{
-          left: lightPosition.x - 150,
-          top: lightPosition.y - 150,
-          width: 300,
-          height: 300,
-          background: `radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 30%, transparent 60%)`,
-          borderRadius: '50%',
+          left: lightPosition.x - 100,
+          top: lightPosition.y - 100,
+          width: 200,
+          height: 200,
+          background: `radial-gradient(ellipse 35% 30% at 35% 35%, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.08) 40%, transparent 70%),
+                      radial-gradient(ellipse 35% 30% at 65% 35%, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.08) 40%, transparent 70%),
+                      radial-gradient(ellipse 50% 60% at 50% 55%, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.06) 50%, transparent 80%)`,
+          clipPath: 'path("M100,130 C100,115 85,100 70,100 C55,100 40,115 40,130 C40,145 100,190 100,190 C100,190 160,145 160,130 C160,145 145,100 130,100 C115,100 100,115 100,130 Z")',
         }}
       />
     </div>
