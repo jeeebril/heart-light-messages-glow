@@ -27,7 +27,6 @@ export const HeartLight = () => {
   // Generate better distributed positions across the entire screen
   const [messagePositions] = useState(() => {
     const positions = [];
-    const margins = { top: 8, bottom: 8, left: 8, right: 8 };
     
     // Create more spread out positions
     const areas = [
@@ -122,61 +121,77 @@ export const HeartLight = () => {
         />
       ))}
 
-      {/* Realistic glassy heart-shaped light */}
+      {/* Enhanced heart-shaped light beam effect */}
+      <div
+        className="fixed pointer-events-none z-40"
+        style={{
+          left: lightPosition.x - 120,
+          top: lightPosition.y - 120,
+          width: 240,
+          height: 240,
+          background: `
+            radial-gradient(ellipse 25% 20% at 35% 35%, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.04) 60%, transparent 80%),
+            radial-gradient(ellipse 25% 20% at 65% 35%, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.04) 60%, transparent 80%),
+            radial-gradient(ellipse 45% 55% at 50% 55%, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 70%, transparent 90%)
+          `,
+          clipPath: 'path("M120,144 C120,120 105,96 80,96 C55,96 40,120 40,144 C40,168 120,224 120,224 C120,224 200,168 200,144 C200,120 185,96 160,96 C135,96 120,120 120,144 Z")',
+        }}
+      />
+
+      {/* Main heart light - enhanced and smaller */}
       <div
         className="fixed pointer-events-none z-50 transition-all duration-100"
         style={{
-          left: lightPosition.x - 80,
-          top: lightPosition.y - 80,
-          filter: 'drop-shadow(0 0 40px rgba(255, 255, 255, 0.8))',
+          left: lightPosition.x - 60,
+          top: lightPosition.y - 60,
+          filter: 'drop-shadow(0 0 30px rgba(255, 255, 255, 0.6))',
         }}
       >
         <div
-          className="w-40 h-40 cursor-pointer pointer-events-auto relative"
+          className="w-28 h-28 cursor-pointer pointer-events-auto relative"
           onClick={handleHeartClick}
           style={{
             background: `
-              radial-gradient(ellipse 35% 30% at 35% 35%, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.4) 50%, transparent 80%),
-              radial-gradient(ellipse 35% 30% at 65% 35%, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.4) 50%, transparent 80%),
-              radial-gradient(ellipse 60% 70% at 50% 60%, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.3) 60%, transparent 90%)
+              radial-gradient(ellipse 30% 25% at 35% 35%, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.5) 40%, rgba(255, 255, 255, 0.2) 70%, transparent 85%),
+              radial-gradient(ellipse 30% 25% at 65% 35%, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.5) 40%, rgba(255, 255, 255, 0.2) 70%, transparent 85%),
+              radial-gradient(ellipse 55% 65% at 50% 60%, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.4) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 90%)
             `,
-            clipPath: 'path("M80,120 C80,100 65,80 50,80 C35,80 20,100 20,120 C20,140 80,200 80,200 C80,200 140,140 140,120 C140,100 125,80 110,80 C95,80 80,100 80,120 Z")',
-            transform: 'scale(0.8)',
-            backdropFilter: 'blur(2px)',
-            border: '1px solid rgba(255, 255, 255, 0.2)',
-            borderRadius: '50% 50% 50% 50% / 60% 60% 40% 40%',
+            clipPath: 'path("M56,72 C56,60 49,48 38,48 C27,48 20,60 20,72 C20,84 56,120 56,120 C56,120 92,84 92,72 C92,60 85,48 74,48 C63,48 56,60 56,72 Z")',
+            backdropFilter: 'blur(1px)',
+            border: '1px solid rgba(255, 255, 255, 0.3)',
+            boxShadow: `
+              inset 0 1px 0 rgba(255, 255, 255, 0.4),
+              inset 0 -1px 0 rgba(255, 255, 255, 0.1),
+              0 0 20px rgba(255, 255, 255, 0.3)
+            `,
           }}
         >
-          {/* Inner glow for more depth */}
+          {/* Enhanced inner highlights for more realistic glass effect */}
           <div
             className="absolute inset-0"
             style={{
               background: `
-                radial-gradient(ellipse 25% 20% at 40% 40%, rgba(255, 255, 255, 0.6) 0%, transparent 70%),
-                radial-gradient(ellipse 25% 20% at 60% 40%, rgba(255, 255, 255, 0.6) 0%, transparent 70%)
+                radial-gradient(ellipse 20% 15% at 40% 40%, rgba(255, 255, 255, 0.7) 0%, transparent 60%),
+                radial-gradient(ellipse 20% 15% at 60% 40%, rgba(255, 255, 255, 0.7) 0%, transparent 60%),
+                linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, transparent 50%)
+              `,
+              clipPath: 'inherit',
+            }}
+          />
+          
+          {/* Sharp edge highlights */}
+          <div
+            className="absolute inset-0"
+            style={{
+              background: `
+                linear-gradient(45deg, rgba(255, 255, 255, 0.6) 0%, transparent 30%),
+                linear-gradient(-45deg, rgba(255, 255, 255, 0.4) 0%, transparent 25%)
               `,
               clipPath: 'inherit',
             }}
           />
         </div>
       </div>
-
-      {/* Enhanced heart-shaped light beam effect */}
-      <div
-        className="fixed pointer-events-none z-40"
-        style={{
-          left: lightPosition.x - 150,
-          top: lightPosition.y - 150,
-          width: 300,
-          height: 300,
-          background: `
-            radial-gradient(ellipse 30% 25% at 35% 35%, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 60%, transparent 80%),
-            radial-gradient(ellipse 30% 25% at 65% 35%, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 60%, transparent 80%),
-            radial-gradient(ellipse 50% 60% at 50% 55%, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.03) 70%, transparent 90%)
-          `,
-          clipPath: 'path("M150,180 C150,150 125,120 100,120 C75,120 50,150 50,180 C50,210 150,280 150,280 C150,280 250,210 250,180 C250,150 225,120 200,120 C175,120 150,150 150,180 Z")',
-        }}
-      />
     </div>
   );
 };

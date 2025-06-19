@@ -37,12 +37,12 @@ export const SupportMessage: React.FC<SupportMessageProps> = ({
     >
       <div className={`px-5 py-3 backdrop-blur-md rounded-xl border shadow-xl ${
         isPink 
-          ? 'bg-pink-500/20 border-pink-300/40' 
+          ? 'bg-pink-400/30 border-pink-200/60' 
           : 'bg-white/12 border-white/25'
       }`}>
         <p className={`text-sm font-semibold whitespace-nowrap text-center tracking-wide ${
           isPink 
-            ? 'text-pink-300' 
+            ? 'text-pink-200' 
             : 'text-white'
         }`}>
           {message}
