@@ -6,18 +6,18 @@ const supportMessages = [
   "You are stronger than you know",
   "Every small step counts",
   "Your potential is limitless", 
-  "You've got this, keep going",
-  "Believe in yourself always",
+  "You've got this",
+  "Believe in yourself",
   "Progress, not perfection",
-  "You are enough, exactly as you are",
-  "Your hard work will pay off",
-  "Stay focused on your dreams",
+  "You are enough",
+  "Keep going",
+  "Stay focused",
   "You're making a difference",
-  "Keep your head up, warrior",
-  "Your courage inspires others",
-  "You're closer than you think",
-  "Trust the process, trust yourself",
-  "You're writing your own story"
+  "Keep your head up",
+  "You inspire others",
+  "You're almost there",
+  "Trust yourself",
+  "I'm proud of you"
 ];
 
 export const HeartLight = () => {
@@ -44,11 +44,22 @@ export const HeartLight = () => {
       const offsetX = (Math.random() - 0.5) * 15;
       const offsetY = (Math.random() - 0.5) * 15;
       
-      positions.push({
-        id: i,
-        x: Math.max(5, Math.min(95, baseX + offsetX)),
-        y: Math.max(5, Math.min(95, baseY + offsetY))
-      });
+      // Special positioning for "I'm proud of you" message (hidden in corner)
+      if (supportMessages[i] === "I'm proud of you") {
+        positions.push({
+          id: i,
+          x: 85,
+          y: 15,
+          isPink: true
+        });
+      } else {
+        positions.push({
+          id: i,
+          x: Math.max(5, Math.min(95, baseX + offsetX)),
+          y: Math.max(5, Math.min(95, baseY + offsetY)),
+          isPink: false
+        });
+      }
     }
     
     return positions;
@@ -89,8 +100,9 @@ export const HeartLight = () => {
   return (
     <div 
       ref={containerRef}
-      className="relative w-full h-screen overflow-hidden cursor-none"
+      className="relative w-full h-screen overflow-hidden"
       style={{
+        cursor: isDragMode ? 'grabbing' : 'none',
         backgroundImage: `url('/lovable-uploads/fb477549-7c7e-4991-b73f-0b064bc3bdda.png')`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
@@ -107,51 +119,44 @@ export const HeartLight = () => {
           message={message}
           position={messagePositions[index]}
           lightPosition={lightPosition}
+          isPink={messagePositions[index].isPink}
         />
       ))}
 
-      {/* Heart-shaped light with proper boundaries */}
+      {/* Enhanced heart-shaped light */}
       <div
         className="fixed pointer-events-none z-50 transition-all duration-100"
         style={{
           left: lightPosition.x - 60,
           top: lightPosition.y - 60,
-          filter: 'drop-shadow(0 0 40px rgba(255, 255, 255, 0.9))',
+          filter: 'drop-shadow(0 0 60px rgba(255, 255, 255, 0.9)) drop-shadow(0 0 30px rgba(255, 255, 255, 0.7))',
         }}
       >
         <div
           className="w-32 h-32 cursor-pointer pointer-events-auto relative"
           onClick={handleHeartClick}
           style={{
-            background: `radial-gradient(ellipse 40% 35% at 30% 30%, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.4) 40%, transparent 70%),
-                        radial-gradient(ellipse 40% 35% at 70% 30%, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.4) 40%, transparent 70%),
-                        radial-gradient(ellipse 60% 80% at 50% 60%, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.3) 50%, transparent 80%)`,
+            background: `radial-gradient(ellipse 45% 40% at 35% 35%, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.6) 30%, rgba(255, 255, 255, 0.3) 60%, transparent 80%),
+                        radial-gradient(ellipse 45% 40% at 65% 35%, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.6) 30%, rgba(255, 255, 255, 0.3) 60%, transparent 80%),
+                        radial-gradient(ellipse 70% 90% at 50% 65%, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.5) 40%, rgba(255, 255, 255, 0.2) 70%, transparent 90%)`,
             clipPath: 'path("M64,100 C64,85 49,70 34,70 C19,70 4,85 4,100 C4,115 64,160 64,160 C64,160 124,115 124,100 C124,85 109,70 94,70 C79,70 64,85 64,100 Z")',
             transform: 'scale(0.9)',
           }}
-        >
-          {/* Heart outline for better definition */}
-          <div
-            className="absolute inset-0 border-2 border-white/40"
-            style={{
-              clipPath: 'path("M64,100 C64,85 49,70 34,70 C19,70 4,85 4,100 C4,115 64,160 64,160 C64,160 124,115 124,100 C124,85 109,70 94,70 C79,70 64,85 64,100 Z")',
-            }}
-          />
-        </div>
+        />
       </div>
 
       {/* Enhanced light beam effect with heart shape */}
       <div
         className="fixed pointer-events-none z-40"
         style={{
-          left: lightPosition.x - 100,
-          top: lightPosition.y - 100,
-          width: 200,
-          height: 200,
-          background: `radial-gradient(ellipse 35% 30% at 35% 35%, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.08) 40%, transparent 70%),
-                      radial-gradient(ellipse 35% 30% at 65% 35%, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.08) 40%, transparent 70%),
-                      radial-gradient(ellipse 50% 60% at 50% 55%, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.06) 50%, transparent 80%)`,
-          clipPath: 'path("M100,130 C100,115 85,100 70,100 C55,100 40,115 40,130 C40,145 100,190 100,190 C100,190 160,145 160,130 C160,145 145,100 130,100 C115,100 100,115 100,130 Z")',
+          left: lightPosition.x - 120,
+          top: lightPosition.y - 120,
+          width: 240,
+          height: 240,
+          background: `radial-gradient(ellipse 40% 35% at 35% 35%, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 40%, transparent 70%),
+                      radial-gradient(ellipse 40% 35% at 65% 35%, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 40%, transparent 70%),
+                      radial-gradient(ellipse 60% 80% at 50% 60%, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.08) 50%, transparent 80%)`,
+          clipPath: 'path("M120,140 C120,120 100,100 80,100 C60,100 40,120 40,140 C40,160 120,220 120,220 C120,220 200,160 200,140 C200,120 180,100 160,100 C140,100 120,120 120,140 Z")',
         }}
       />
     </div>

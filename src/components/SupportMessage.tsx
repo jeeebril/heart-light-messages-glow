@@ -3,14 +3,16 @@ import React from 'react';
 
 interface SupportMessageProps {
   message: string;
-  position: { x: number; y: number };
+  position: { x: number; y: number; isPink?: boolean };
   lightPosition: { x: number; y: number };
+  isPink?: boolean;
 }
 
 export const SupportMessage: React.FC<SupportMessageProps> = ({
   message,
   position,
   lightPosition,
+  isPink = false,
 }) => {
   // Calculate distance from light to message
   const messageX = (position.x / 100) * window.innerWidth;
@@ -33,8 +35,16 @@ export const SupportMessage: React.FC<SupportMessageProps> = ({
         opacity: opacity,
       }}
     >
-      <div className="px-5 py-3 bg-white/12 backdrop-blur-md rounded-xl border border-white/25 shadow-xl">
-        <p className="text-white text-sm font-semibold whitespace-nowrap text-center tracking-wide">
+      <div className={`px-5 py-3 backdrop-blur-md rounded-xl border shadow-xl ${
+        isPink 
+          ? 'bg-pink-500/20 border-pink-300/40' 
+          : 'bg-white/12 border-white/25'
+      }`}>
+        <p className={`text-sm font-semibold whitespace-nowrap text-center tracking-wide ${
+          isPink 
+            ? 'text-pink-300' 
+            : 'text-white'
+        }`}>
           {message}
         </p>
       </div>
